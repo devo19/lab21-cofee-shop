@@ -1,19 +1,42 @@
 package co.grandcircus.coffeeshop;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 @Repository
+@Transactional
 public class UsersDao {
-	@Autowired
-	private JdbcTemplate jdbc;
+	
+	@PersistenceContext
+	EntityManager em;
+	
+	public List<User> findAll(){		
+		return em.createQuery("FROM User", User.class)
+				.getResultList();		
+	}
+	
+	public User findById(Integer id) {
+		return em.find(User.class, id);
+	}
 	
 	public void create(User user) {
-		String sql = "INSERT INTO users ( name, email, password) VALUES ( ?,?,? )";
-		jdbc.update(sql, user.getName(), user.getEmail(), user.getPassword());
+		em.persist(user);
 	}
+	
+	public void update(User user) {
+		em.merge(user);
+	}
+	
+	public void delete (Integer id) {
+		User user = em.getReference(User.class, id);
+				em.remove(user);
+	}	
+	
+	
 
 }

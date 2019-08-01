@@ -12,7 +12,8 @@
 </head>
 <body>
 
-<div>		
+<div>	
+<a href="/admin" class="btn btn-secondary">Admin</a>	
     <marquee scrollamount="15"
     direction="left"
     behavior="scroll">    
@@ -33,7 +34,7 @@
 				<tr>
 					<td><a id=${s1.id}">${s1.name}</a></td>
 					<td>${s1.description}</td>
-					<td>${s1.price}</td>
+					<td>${s1.price}</td>					
 				</tr>
 				</c:forEach>
 			</tbody>

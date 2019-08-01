@@ -1,8 +1,16 @@
 package co.grandcircus.coffeeshop;
 
-public class User {
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-	private int id;
+@Entity
+@Table(name = "users")
+public class User {
+	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer id;
 	private String name;
 	private String email;
 	private String password;
@@ -15,7 +23,7 @@ public class User {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

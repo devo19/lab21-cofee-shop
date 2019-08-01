@@ -2,21 +2,44 @@ package co.grandcircus.coffeeshop;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Transactional
+
 public class ProductsDao {
 	
-	@Autowired
-	private JdbcTemplate jdbc;
+	@PersistenceContext
+	EntityManager em;
 	
-	public List<Product> findAll() {
-		String sql = "SELECT * FROM products";
-		return jdbc.query(sql, new BeanPropertyRowMapper(Product.class));
+	public List<Product> findAll(){		
+		List<Product> products = em.createQuery("FROM Product", Product.class)
+				.getResultList();
+		return products;
 	}
+	
+	// find specific Product with it's unique id
+	public Product findById(Integer id) {
+		return em.find(Product.class, id);
+	}
+	
+	public void create(Product product) {
+		em.persist(product);
+	}
+	
+	public void update(Product product) {
+		em.merge(product);
+	}
+	
+	public void delete (Integer id) {
+		Product product = em.getReference(Product.class, id);
+				em.remove(product);
+	}
+	
 	
 
 }
